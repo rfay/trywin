@@ -6,8 +6,27 @@ on:
     branches: [ main ]
 
 jobs:
-  windows-test:
+  windows-amd64-test:
     runs-on: windows-2025
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Show system info
+      run: |
+        echo "OS: $env:OS"
+        echo "Processor: $env:PROCESSOR_ARCHITECTURE"
+        echo "PowerShell version: $($PSVersionTable.PSVersion)"
+        Get-ComputerInfo | Select-Object WindowsProductName, WindowsVersion, TotalPhysicalMemory
+        
+    - name: Setup tmate session
+      uses: mxschmitt/action-tmate@v3
+      with:
+        limit-access-to-actor: true
+
+  windows-arm64-test:
+    runs-on: windows-2025-arm64
     
     steps:
     - name: Checkout code
